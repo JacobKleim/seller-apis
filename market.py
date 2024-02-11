@@ -59,10 +59,11 @@ def update_stocks(stocks, campaign_id, access_token):
 
     Example:
         >>> update_stocks([{"sku": "123", "warehouseId": "456",
-        "items": [
-            {"count": 10, "type": "FIT", "updatedAt": "2022-01-01T00:00:00Z"}]}
-            ],
-        "your_campaign_id", "your_access_token")
+        ...     "items": [
+        ...     {"count": 10, "type": "FIT",
+        ...      "updatedAt": "2022-01-01T00:00:00Z"}]}
+        ...     ],
+        ...     "your_campaign_id", "your_access_token")
     """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
