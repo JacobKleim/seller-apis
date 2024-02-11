@@ -27,7 +27,7 @@ def get_product_list(last_id, client_id, seller_token):
     Examples:
         >>> get_product_list("123", "your_client_id", "your_seller_token")
         [{'item_id': '456', 'name': 'Product 1', 'price': 100.0},
-        {'item_id': '789', 'name': 'Product 2', 'price': 150.0}]
+        ... {'item_id': '789', 'name': 'Product 2', 'price': 150.0}]
     """
     url = "https://api-seller.ozon.ru/v2/product/list"
     headers = {
@@ -91,8 +91,8 @@ def update_price(prices: list, client_id, seller_token):
 
     Examples:
         >>> update_price([{'offer_id': '123', 'price': 120.0},
-        {'offer_id': '456', 'price': 160.0}],
-        "your_client_id", "your_seller_token")
+        ...     {'offer_id': '456', 'price': 160.0}],
+        ...     "your_client_id", "your_seller_token")
         {'success': True, 'message': 'Prices updated successfully'}
     """
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
@@ -120,8 +120,8 @@ def update_stocks(stocks: list, client_id, seller_token):
 
     Examples:
         >>> update_stocks([{'offer_id': '123', 'stock': 50},
-        {'offer_id': '456', 'stock': 30}],
-        "your_client_id", "your_seller_token")
+        ...     {'offer_id': '456', 'stock': 30}],
+        ...     "your_client_id", "your_seller_token")
         {'success': True, 'message': 'Stocks updated successfully'}
     """
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
@@ -137,15 +137,19 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 def download_stock():
     """
-    Скачивает файл 'ostatki' с сайта Casio, извлекает данные и возвращает список остатков часов.
+    Скачивает файл 'ostatki' с сайта Casio.
+
+    Извлекает данные и возвращает список остатков часов.
 
     Returns:
         list: Список остатков часов в виде словарей.
 
     Examples:
         >>> download_stock()
-        [{'Код': '123', 'Наименование': 'Product 1', 'Цена': '5,990.00 руб.', 'Количество': '10'},
-        {'Код': '456', 'Наименование': 'Product 2', 'Цена': '8,500.50 руб.', 'Количество': '1'}]
+        [{'Код': '123', 'Наименование': 'Product 1',
+        ... 'Цена': '5,990.00 руб.', 'Количество': '10'},
+        ... {'Код': '456', 'Наименование': 'Product 2',
+        ... 'Цена': '8,500.50 руб.', 'Количество': '1'}]
     """
     # Скачать остатки с сайта
     casio_url = "https://timeworld.ru/upload/files/ostatki.zip"
@@ -168,7 +172,9 @@ def download_stock():
 
 def create_stocks(watch_remnants, offer_ids):
     """
-    Создает список остатков товаров, учитывая только те, которые загружены в магазин.
+    Создает список остатков товаров.
+
+    Учитывает только те, которые загружены в магазин.
 
     Args:
         watch_remnants (list): Список остатков товаров извлеченных из файла.
@@ -179,8 +185,9 @@ def create_stocks(watch_remnants, offer_ids):
 
     Examples:
         >>> create_stocks(
-        ... [{'Код': '123', 'Наименование': 'Product 1', 'Цена': '5,990.00 руб.', 'Количество': '10'}],
-        ... ['123', '456']
+        ...     [{'Код': '123', 'Наименование': 'Product 1',
+        ...      'Цена': '5,990.00 руб.', 'Количество': '10'}],
+        ...     ['123', '456']
         ... )
         [{'offer_id': '123', 'stock': 100}]
     """
@@ -204,7 +211,9 @@ def create_stocks(watch_remnants, offer_ids):
 
 def create_prices(watch_remnants, offer_ids):
     """
-    Создает список цен на товары, учитывая только те, которые загружены в магазин.
+    Создает список цен на товары.
+
+    Учитывает только те, которые загружены в магазин.
 
     Args:
         watch_remnants (list): Список остатков товаров извлеченных из файла.
@@ -215,10 +224,12 @@ def create_prices(watch_remnants, offer_ids):
 
     Examples:
         >>> create_prices(
-        ...     [{'Код': '123', 'Наименование': 'Product 1', 'Цена': '5,990.00 руб.'}],
+        ...     [{'Код': '123', 'Наименование': 'Product 1',
+        ...      'Цена': '5,990.00 руб.'}],
         ...     ['123', '456']
         ... )
-        [{'auto_action_enabled': 'UNKNOWN', 'currency_code': 'RUB', 'offer_id': '123', 'old_price': '0', 'price': '5990'}]
+        [{'auto_action_enabled': 'UNKNOWN', 'currency_code': 'RUB',
+        ... 'offer_id': '123', 'old_price': '0', 'price': '5990'}]
     """
     prices = []
     for watch in watch_remnants:
@@ -294,8 +305,10 @@ async def upload_prices(watch_remnants, client_id, seller_token):
         list: Список обновленных цен.
 
     Examples:
-        >>> await upload_prices(watch_remnants, "your_client_id", "your_seller_token")
-        [{'auto_action_enabled': 'UNKNOWN', 'currency_code': 'RUB', 'offer_id': '123', 'old_price': '0', 'price': '5990'}]
+        >>> await upload_prices(watch_remnants, "your_client_id",
+        ...     "your_seller_token")
+        [{'auto_action_enabled': 'UNKNOWN', 'currency_code': 'RUB',
+        ... 'offer_id': '123', 'old_price': '0', 'price': '5990'}]
     """
     offer_ids = get_offer_ids(client_id, seller_token)
     prices = create_prices(watch_remnants, offer_ids)
@@ -314,7 +327,8 @@ async def upload_stocks(watch_remnants, client_id, seller_token):
         seller_token: Токен продавца.
 
     Returns:
-        tuple: Кортеж, содержащий два списка - обновленные остатки и непустые остатки.
+        tuple: Кортеж, содержащий два списка - обновленные остатки
+        и непустые остатки.
 
     Examples:
         >>> await upload_stocks(
